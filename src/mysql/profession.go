@@ -25,7 +25,7 @@ func GetProfessions() (professions []models.Profession) {
 	db := connect()
 	defer db.Close()
 
-	query := fmt.Sprintf("SELECT id, name, other_names, level, parent_id, area_id FROM %s WHERE parsed = false", TableProfessions)
+	query := fmt.Sprintf("SELECT position_id, name, other_names, level, parent_id, area_id FROM %s WHERE parsed = false", TableProfessions)
 	rows, err := db.Query(query)
 	checkErr(err)
 	defer rows.Close()
