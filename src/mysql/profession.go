@@ -12,7 +12,7 @@ func SetParsedStatusToProfession(id int) {
 	db := connect()
 	defer db.Close()
 
-	query := fmt.Sprintf(`update %s set parsed=true where id=%d`, TableProfessions, id)
+	query := fmt.Sprintf(`update %s set parsed=true where position_id=%d`, TableProfessions, id)
 	fmt.Println(query)
 	tx, _ := db.Begin()
 	_, err := db.Exec(query)
