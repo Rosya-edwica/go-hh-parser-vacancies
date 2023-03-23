@@ -8,6 +8,7 @@ import (
 )
 
 func SaveOneVacancy(v models.Vacancy) (err error) {
+	if len(v.Title) < 2 { return nil }
 	db := connect()
 	defer db.Close()
 
