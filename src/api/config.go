@@ -53,13 +53,21 @@ func CreateLink(name string, area int, role int) (link string) {
 		}
 		link = domain + params.Encode()
 		return
-	} else {
+	} else if role == 85 || role == 84{
 		params := url.Values{
 			"search_field":      {search_field},
 			"per_page":          {per_page},
 			"text":              {name},
 			"area":              {strconv.Itoa(area)},
 			"professional_role": professional_roles[role],
+		}
+		link = domain + params.Encode()
+		return
+	} else {
+		params := url.Values{
+			"search_field":      {search_field},
+			"per_page":          {per_page},
+			"text":              {name},
 		}
 		link = domain + params.Encode()
 		return
