@@ -23,15 +23,6 @@ const (
 	search_field    = "name"
 )
 
-var professional_roles = map[int][]string{
-	85: {"159", "21", "31", "39", "52", "58", "63", "67", "81", "172", "131"},
-	84: {"4", "5", "62", "70"},
-}
-
-var industries = map[int][]string{
-	86: {"13.662", "388.509"},
-}
-
 var headers = map[string]string{
 	"User-Agent":    "Mozilla/5.0 (iPad; CPU OS 7_2_1 like Mac OS X; en-US) AppleWebKit/533.14.6 (KHTML, like Gecko) Version/3.0.5 Mobile/8B116 Safari/6533.14.6",
 	"Authorization": fmt.Sprintf("Bearer %s", TOKEN),
@@ -42,36 +33,24 @@ func init() {
 	RelevantCurrencies = GetCurrencies()
 }
 
-func CreateLink(name string, area int, role int) (link string) {
-	if role == 86 {
-		params := url.Values{
+func CreateLink(name string, area int) (link string) {
+	var params url.Values
+	if area == 0 {
+		params = url.Values{
+			"search_field": {search_field},
+			"per_page":     {per_page},
+			"text":         {name},
+		}
+	} else {
+		params = url.Values{
 			"search_field": {search_field},
 			"per_page":     {per_page},
 			"text":         {name},
 			"area":         {strconv.Itoa(area)},
-			"industry":     industries[role],
 		}
-		link = domain + params.Encode()
-		return
-	} else if role == 85 || role == 84{
-		params := url.Values{
-			"search_field":      {search_field},
-			"per_page":          {per_page},
-			"text":              {name},
-			"area":              {strconv.Itoa(area)},
-			"professional_role": professional_roles[role],
-		}
-		link = domain + params.Encode()
-		return
-	} else {
-		params := url.Values{
-			"search_field":      {search_field},
-			"per_page":          {per_page},
-			"text":              {name},
-		}
-		link = domain + params.Encode()
-		return
 	}
+	link = domain + params.Encode()
+	return
 
 }
 

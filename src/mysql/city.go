@@ -17,10 +17,15 @@ func GetCities() (cities []models.City) {
 	checkErr(err)
 	CITY_LIMIT := os.Getenv("CITY_LIMIT")
 
+	var query string
 	if CITY_LIMIT == "" {
-		logger.Log.Fatal("Проверь переменную окружения CITY_LIMIT")
+		query = fmt.Sprintf("SELECT id_hh, id_edwica, name FROM %s WHERE id_hh != 0 ORDER BY id_hh", TableCity)
+		logger.Log.Print("Ограничений на поиск по городам нет")
+	} else {
+		query = fmt.Sprintf("SELECT id_hh, id_edwica, name FROM %s WHERE id_hh != 0 ORDER BY id_hh LIMIT %s", TableCity, CITY_LIMIT)
+		logger.Log.Printf("Ограничение на поиск по городам: %s", CITY_LIMIT)
+
 	}
-	query := fmt.Sprintf("SELECT * FROM %s WHERE id_hh != 0 ORDER BY id_hh LIMIT %s", TableCity, CITY_LIMIT)
 	rows, err := db.Query(query)
 	checkErr(err)
 	for rows.Next() {

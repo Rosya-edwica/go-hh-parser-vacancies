@@ -7,7 +7,6 @@ import (
 	"github.com/Rosya-edwica/go-hh-parser-vacancies/src/models"
 )
 
-
 func SetParsedStatusToProfession(id int) {
 	db := connect()
 	defer db.Close()
@@ -18,8 +17,7 @@ func SetParsedStatusToProfession(id int) {
 	_, err := db.Exec(query)
 	checkErr(err)
 	tx.Commit()
-} 
-
+}
 
 func GetProfessions() (professions []models.Profession) {
 	db := connect()
@@ -31,17 +29,17 @@ func GetProfessions() (professions []models.Profession) {
 	defer rows.Close()
 	for rows.Next() {
 		var (
-			name, other string
+			name, other                    string
 			id, level, parent_id, profRole int
 		)
 		err = rows.Scan(&id, &name, &other, &level, &parent_id, &profRole)
 		checkErr(err)
 		prof := models.Profession{
-			Id: id,
-			Name: name,
+			Id:         id,
+			Name:       name,
 			OtherNames: strings.Split(other, "|"),
-			Level: level,
-			ParentId: parent_id,
+			Level:      level,
+			ParentId:   parent_id,
 			ProfRoleId: profRole,
 		}
 		professions = append(professions, prof)

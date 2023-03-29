@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"strings"
+	"sync"
 
 	"github.com/tidwall/gjson"
 
@@ -11,9 +12,9 @@ import (
 	"github.com/Rosya-edwica/go-hh-parser-vacancies/src/mysql"
 )
 
-func scrapeVacancy(url string, city_edwica int, id_profession int) {
+func scrapeVacancy(url string, city_edwica int, id_profession int, wg *sync.WaitGroup) {
 	var vacancy models.Vacancy
-	checkCaptcha(url)
+	// checkCaptcha(url)
 	json, err := GetJson(url)
 	if err != nil {
 		logger.Log.Printf("Ошибка при подключении к странице %s.\nТекст ошибки: %s", err, url)
@@ -34,6 +35,7 @@ func scrapeVacancy(url string, city_edwica int, id_profession int) {
 	vacancy.Experience = gjson.Get(json, "experience.name").String()
 	vacancy.DateUpdate = gjson.Get(json, "created_at").String()
 	mysql.SaveOneVacancy(vacancy)
+	wg.Done()
 }
 
 func getSalary(vacancyJson string) (salary models.Salary) {
