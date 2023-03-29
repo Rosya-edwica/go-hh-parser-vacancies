@@ -91,7 +91,7 @@ func groupCities() (groups [][]models.City) {
 func parseProfessionInCity(city models.City, profession models.Profession, wg *sync.WaitGroup) {
 	defer wg.Done()
 	profession.OtherNames = append(profession.OtherNames, profession.Name)
-	unique_professions := unique_list(profession.OtherNames)
+	unique_professions := Unique_list(profession.OtherNames)
 	for _, prof := range unique_professions {
 		if len(prof) <= 3 {
 			continue
@@ -100,7 +100,7 @@ func parseProfessionInCity(city models.City, profession models.Profession, wg *s
 	}
 }
 
-func unique_list(list []string) []string {
+func Unique_list(list []string) []string {
 	var unique []string
 	var re = regexp.MustCompile(`(?m) +`)
 

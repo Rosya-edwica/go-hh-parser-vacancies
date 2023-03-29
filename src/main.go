@@ -45,11 +45,20 @@ func Run() {
 		Name:      "Russia",
 	}
 	professions := mysql.GetProfessions()
-	for _, prof := range professions {
-		logger.Log.Printf("Ищем профессию `%s`", prof.Name)
-		api.GetVacanciesByQuery(defaultCity, prof)
-		mysql.SetParsedStatusToProfession(prof.Id)
-		logger.Log.Printf("Профессия %s спарсена", prof.Name)
+
+	for _, profession := range professions {
+		logger.Log.Printf("Ищем профессию `%s`", profession.Name)
+		profession.OtherNames = append(profession.OtherNames, profession.Name)
+		unique_professions := api.Unique_list(profession.OtherNames)
+		for _, prof := range unique_professions {
+			if len(prof) <= 3 {
+				continue
+			}
+			api.GetVacanciesByQuery(defaultCity, profession)
+
+		}
+		mysql.SetParsedStatusToProfession(profession.Id)
+		logger.Log.Printf("Профессия %s спарсена", profession.Name)
 
 	}
 }
