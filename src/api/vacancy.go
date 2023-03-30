@@ -10,14 +10,16 @@ import (
 	"github.com/Rosya-edwica/go-hh-parser-vacancies/src/logger"
 	"github.com/Rosya-edwica/go-hh-parser-vacancies/src/models"
 	"github.com/Rosya-edwica/go-hh-parser-vacancies/src/mysql"
+	"github.com/Rosya-edwica/go-hh-parser-vacancies/src/telegram"
 )
 
 func scrapeVacancy(url string, city_edwica int, id_profession int, wg *sync.WaitGroup) {
 	var vacancy models.Vacancy
-	// checkCaptcha(url)
+	defer wg.Done()
 	json, err := GetJson(url)
 	if err != nil {
-		logger.Log.Printf("Ошибка при подключении к странице %s.\nТекст ошибки: %s", err, url)
+		telegram.Mailing(fmt.Sprintf("Ошибка при подключении к странице %s.\nТекст ошибки: %s", err, url))
+		logger.Log.Fatalf("Ошибка при подключении к странице %s.\nТекст ошибки: %s", err, url)
 		return
 	}
 
@@ -35,7 +37,6 @@ func scrapeVacancy(url string, city_edwica int, id_profession int, wg *sync.Wait
 	vacancy.Experience = gjson.Get(json, "experience.name").String()
 	vacancy.DateUpdate = gjson.Get(json, "created_at").String()
 	mysql.SaveOneVacancy(vacancy)
-	wg.Done()
 }
 
 func getSalary(vacancyJson string) (salary models.Salary) {

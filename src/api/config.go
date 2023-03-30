@@ -19,7 +19,7 @@ const (
 	TOKEN           = "QQAVSIBVU4B0JCR296THKB22JP05A92H329U49TDD9CRIS8DT9BRPPT7M9OLQ6HD"
 	dictionariesUrl = "https://api.hh.ru/dictionaries"
 	domain          = "https://api.hh.ru/vacancies?"
-	per_page        = "100"
+	per_page        = "60"
 	search_field    = "name"
 )
 
