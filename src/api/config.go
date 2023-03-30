@@ -56,7 +56,7 @@ func CreateLink(name string, area int) (link string) {
 
 func GetJson(url string) (json string, err error) {
 	client := http.Client{
-		Timeout: 30 * time.Second,
+		Timeout: 120 * time.Second,
 	}
 
 	req, err := http.NewRequest("GET", url, nil)
