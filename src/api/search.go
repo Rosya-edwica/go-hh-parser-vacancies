@@ -17,7 +17,7 @@ const GroupSize = 1
 
 func GetVacanciesByQuery(city models.City, profession models.Profession) {
 	url := CreateLink(profession.Name, city.HH_ID)
-	checkCaptcha(url)
+	// checkCaptcha(url)
 	json, err := GetJson(url)
 	if err != nil {
 		logger.Log.Printf("Ошибка при подключении к странице с вакансиями: %s. Error: %s", err, url)
