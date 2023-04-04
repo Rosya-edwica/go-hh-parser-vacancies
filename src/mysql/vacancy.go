@@ -23,8 +23,8 @@ func SaveOneVacancy(v models.Vacancy) (err error) {
 	if err != nil {
 		logger.Log.Printf("Ошибка: Вакансия %d не была добавлена в базу - %s", v.Id, err)
 		err = tx.Commit()
-		checkErr(err)
 		db.Close()
+		checkErr(err)
 		return
 	}
 	err = tx.Commit()
