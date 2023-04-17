@@ -16,7 +16,7 @@ func SaveOneVacancy(v models.Vacancy) (err error) {
 	defer db.Close()
 
 	columns := buildPatternInsertValues(12)
-	smt := fmt.Sprintf(`INSERT INTO %s (hh_id, hh_url, name, city_id, position_id, hh_prof_areas, hh_specs, experience, salary_from, salary_to, key_skills, vacancy_date) VALUES %s`,
+	smt := fmt.Sprintf(`INSERT INTO %s (id, url, name, city_id, position_id, prof_areas, specs, experience, salary_from, salary_to, key_skills, vacancy_date) VALUES %s`,
 		TableVacancy, columns)
 	tx, _ := db.Begin()
 	_, err = db.Exec(smt, v.Id, v.Url, v.Title, v.CityId, v.ProfessionId, v.ProfAreas, v.Specializations, v.Experience, v.SalaryFrom, v.SalaryTo, v.Skills, v.DateUpdate)
