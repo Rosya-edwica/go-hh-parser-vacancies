@@ -2,21 +2,36 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/Rosya-edwica/go-hh-parser-vacancies/src/api"
 	"github.com/Rosya-edwica/go-hh-parser-vacancies/src/logger"
 	"github.com/Rosya-edwica/go-hh-parser-vacancies/src/models"
 	"github.com/Rosya-edwica/go-hh-parser-vacancies/src/mysql"
+	"github.com/joho/godotenv"
 )
 
 const GroupSize = 1
+var ProfessionsFromFile bool
+
+func init() {
+	err := godotenv.Load(".env")
+	if err != nil {
+		panic("Нет файла с переменными окружения .env!")
+	}
+	val := os.Getenv("PROFESSIONS_FROM_FILE")
+	if val == "true" {
+		ProfessionsFromFile = true
+	} else {
+		ProfessionsFromFile = false
+	}
+	}	
 
 func main() {
 	logger.Log.Printf("Старт программы")
 	start := time.Now().Unix()
 	UpdateCurrency()
-
 	Run()
 
 	logger.Log.Println("Время выполнения программы в секундах:", time.Now().Unix()-start)
@@ -44,8 +59,7 @@ func Run() {
 		EDWICA_ID: 1,
 		Name:      "Russia",
 	}
-	professions := mysql.GetProfessions()
-
+	professions := mysql.GetProfessionsFromFile(ProfessionsFromFile)
 	for _, profession := range professions {
 		logger.Log.Printf("Ищем профессию `%s`", profession.Name)
 		profession.OtherNames = append(profession.OtherNames, profession.Name)
@@ -57,7 +71,7 @@ func Run() {
 			api.GetVacanciesByQuery(defaultCity, profession)
 
 		}
-		mysql.SetParsedStatusToProfession(profession.Id)
+		// mysql.SetParsedStatusToProfession(profession.Id)
 		logger.Log.Printf("Профессия %s спарсена", profession.Name)
 
 	}

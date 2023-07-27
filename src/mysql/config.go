@@ -8,13 +8,14 @@ import (
 
 	"github.com/Rosya-edwica/go-hh-parser-vacancies/src/logger"
 	"github.com/Rosya-edwica/go-hh-parser-vacancies/src/telegram"
+	"github.com/joho/godotenv"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
 var (
 	TableCity        = "h_city"
-	TableProfessions = "h_position"
+	TableProfessions = "position"
 	TableCurrencies  = "h_currency"
 	TableVacancy     = "h_vacancy"
 	host             string
@@ -25,6 +26,8 @@ var (
 )
 
 func init() {
+	err := godotenv.Load(".env")
+	checkErr(err)
 	host = os.Getenv("MYSQL_HOST")
 	port = os.Getenv("MYSQL_PORT")
 	user = os.Getenv("MYSQL_USER")
