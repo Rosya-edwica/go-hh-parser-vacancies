@@ -63,37 +63,6 @@ func GetProfessionsFromFile(fromFile bool) (professions []models.Profession) {
 	return
 }
 
-func GetProfessionsFromAreaFile() (professions []models.Profession) {
-	db := connect()
-	defer db.Close()
-
-	query := `SELECT position.name, position.id, position.other_names
-	FROM position
-	LEFT JOIN position_to_prof_area ON position_to_prof_area.position_id=position.id
-	LEFT JOIN prof_area_to_specialty ON prof_area_to_specialty.id=position_to_prof_area.area_id
-	LEFT JOIN professional_area ON professional_area.id=prof_area_to_specialty.prof_area_id
-	WHERE LOWER(professional_area.name) = 'правоохранительные органы'`
-	rows, err := db.Query(query)
-	checkErr(err)
-	defer rows.Close()
-	for rows.Next() {
-		var (
-			name string
-			other sql.NullString
-			id int
-		)
-		err = rows.Scan(&id, &name, &other)
-		checkErr(err)
-
-		prof := models.Profession{
-			Id:         id,
-			Name:       name,
-			OtherNames: strings.Split(other.String, "|"),
-		}
-		professions = append(professions, prof)
-	}
-	return
-}
 
 func readProfAreasFromFile() (areas []string) {
 	filepath := "prof_areas.txt"
