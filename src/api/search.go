@@ -67,7 +67,7 @@ func parseProfessionByCurrentCity(profession models.Profession) {
 		}
 		wg.Wait()
 	}
-	mysql.SetParsedStatusToProfession(profession.Id)
+	// mysql.SetParsedStatusToProfession(profession.Id)
 	logger.Log.Printf("Профессия %s спарсена", profession.Name)
 
 }
